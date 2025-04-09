@@ -1,6 +1,7 @@
 package com.scaler.productservice.controllers;
 
 import com.scaler.productservice.dtos.GenericProductDto;
+import com.scaler.productservice.exceptions.NotFoundExceptions;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +19,7 @@ public class ProductController {
         this.productService = productService;
     }
     @GetMapping("{id}")
-    public GenericProductDto getProductByID(@PathVariable int id) {
+    public GenericProductDto getProductByID(@PathVariable int id) throws NotFoundExceptions {
         return productService.getProductByID(id);
     }
     @GetMapping
@@ -31,7 +32,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    public GenericProductDto deleteProduct(@PathVariable int id) {
+    public GenericProductDto deleteProduct(@PathVariable int id) throws NotFoundExceptions {
         return productService.deleteProduct(id);
     }
 

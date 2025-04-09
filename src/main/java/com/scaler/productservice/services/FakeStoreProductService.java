@@ -2,6 +2,7 @@ package com.scaler.productservice.services;
 
 import com.scaler.productservice.dtos.FakeStoreProductDto;
 import com.scaler.productservice.dtos.GenericProductDto;
+import com.scaler.productservice.exceptions.NotFoundExceptions;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,6 @@ import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service("fakeStoreService")
@@ -37,12 +37,15 @@ public class FakeStoreProductService implements ProductService {
 
 
     @Override
-    public GenericProductDto getProductByID(int id) {
+    public GenericProductDto getProductByID(int id) throws NotFoundExceptions {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> response =
                 restTemplate.getForEntity(specificProductRequestUrl, FakeStoreProductDto.class, id);
 
         FakeStoreProductDto fakeStoreProductDto = response.getBody();
+        if (fakeStoreProductDto == null) {
+            throw new NotFoundExceptions("Product with id " + id + " not found");
+        }
         return convertFakeStoreProductIntoGenericProduct(fakeStoreProductDto);
 
     }
@@ -69,7 +72,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public GenericProductDto deleteProduct(int id) {
+    public GenericProductDto deleteProduct(int id) throws NotFoundExceptions{
         RestTemplate restTemplate = restTemplateBuilder.build();
 
 
@@ -80,6 +83,9 @@ public class FakeStoreProductService implements ProductService {
                 requestCallback, responseExtractor, id);
 
         FakeStoreProductDto fakeStoreProductDto = response.getBody();
+        if (fakeStoreProductDto == null) {
+            throw new NotFoundExceptions("Product with id " + id + " not found");
+        }
 
         return convertFakeStoreProductIntoGenericProduct(fakeStoreProductDto);
     }
