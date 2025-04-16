@@ -3,6 +3,7 @@ package com.scaler.productservice.services;
 import com.scaler.productservice.dtos.FakeStoreProductDto;
 import com.scaler.productservice.dtos.GenericProductDto;
 import com.scaler.productservice.exceptions.NotFoundExceptions;
+import com.scaler.productservice.services.ProductService;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class FakeStoreProductService implements ProductService {
 
 
     @Override
-    public GenericProductDto getProductByID(int id) throws NotFoundExceptions {
+    public GenericProductDto getProductByID(long id) throws NotFoundExceptions {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> response =
                 restTemplate.getForEntity(specificProductRequestUrl, FakeStoreProductDto.class, id);
@@ -72,7 +73,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public GenericProductDto deleteProduct(int id) throws NotFoundExceptions{
+    public GenericProductDto deleteProduct(long id) throws NotFoundExceptions{
         RestTemplate restTemplate = restTemplateBuilder.build();
 
 
@@ -91,7 +92,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public GenericProductDto updateProduct(int id, GenericProductDto product) {
+    public GenericProductDto updateProduct(long id, GenericProductDto product) {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
         HttpHeaders headers = new HttpHeaders();

@@ -15,7 +15,7 @@ public class ProductController {
     private ProductService productService;
 
     // constructorinjection in spring
-    public ProductController(@Qualifier("fakeStoreService") ProductService productService) {
+    public ProductController(@Qualifier("DBProductService") ProductService productService) {
         this.productService = productService;
     }
     @GetMapping("{id}")

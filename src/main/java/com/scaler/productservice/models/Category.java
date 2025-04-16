@@ -1,10 +1,13 @@
 package com.scaler.productservice.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Category extends BaseModel {
 
     private String name;
