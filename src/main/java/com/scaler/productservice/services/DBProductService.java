@@ -59,10 +59,33 @@ public class DBProductService implements ProductService {
 
     @Override
     public GenericProductDto updateProduct(long id, GenericProductDto genericProduct) {
-        Product product = constructProductDTO(genericProduct);
-        product.setId(id);
-        productRepository.save(product);
-        return genericProduct;
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        if(genericProduct.getTitle()!=null) {
+            existingProduct.setTitle(genericProduct.getTitle());
+        }
+        if(genericProduct.getDescription()!=null) {
+            existingProduct.setDescription(genericProduct.getDescription());
+        }
+//        if(genericProduct.getPrice().wasNull()) {
+//            existingProduct.setPrice(genericProduct.getPrice());
+//        }
+        if(genericProduct.getImage()!=null) {
+            existingProduct.setImage(genericProduct.getImage());
+        }
+        if(genericProduct.getCategory()!=null) {
+            Category category = categoryRepository.findByName(genericProduct.getCategory());
+            if (category == null) {
+                category = new Category();
+                category.setName(genericProduct.getCategory());
+                category = categoryRepository.save(category);
+            }
+            existingProduct.setCategory(category);
+
+        }
+
+        Product savedProduct = productRepository.save(existingProduct);
+        return ProductToGenericProductDTO(savedProduct);
     }
 
     private List<GenericProductDto> getAllGenericProductDto(List<Product> products) {
@@ -108,4 +131,17 @@ public class DBProductService implements ProductService {
         genericProductDto.setTitle(products.get().getTitle());
         return genericProductDto;
     }
+
+    private GenericProductDto ProductToGenericProductDTO(Product product) {
+        GenericProductDto genericProductDto = new GenericProductDto();
+        Category category = product.getCategory();
+        genericProductDto.setId(product.getId());
+        genericProductDto.setTitle(product.getTitle());
+        genericProductDto.setCategory(category.getName());
+        genericProductDto.setPrice(product.getPrice());
+        genericProductDto.setImage(product.getImage());
+        genericProductDto.setDescription(product.getDescription());
+        return genericProductDto;
+    }
+
 }

@@ -19,25 +19,27 @@ public class ProductController {
         this.productService = productService;
     }
     @GetMapping("{id}")
-    public GenericProductDto getProductByID(@PathVariable int id) throws NotFoundExceptions {
+    public GenericProductDto getProductByID(@PathVariable long id) throws NotFoundExceptions {
         return productService.getProductByID(id);
     }
     @GetMapping
     public List<GenericProductDto> getAllProducts() {
         return productService.getAllProducts();
     }
+
     @PostMapping
     public GenericProductDto createProduct(@RequestBody GenericProductDto product) {
         return productService.createProduct(product);
     }
 
     @DeleteMapping("{id}")
-    public GenericProductDto deleteProduct(@PathVariable int id) throws NotFoundExceptions {
+    public GenericProductDto deleteProduct(@PathVariable long id) throws NotFoundExceptions {
         return productService.deleteProduct(id);
     }
 
     @PutMapping("{id}")
-    public GenericProductDto updateProduct(@PathVariable int id, @RequestBody GenericProductDto product) {
+    public GenericProductDto updateProduct(@PathVariable long id, @RequestBody GenericProductDto product) {
         return productService.updateProduct(id,product);
     }
+
 }
